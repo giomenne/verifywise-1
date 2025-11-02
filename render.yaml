@@ -132,7 +132,7 @@ services:
 
   # Frontend (Static Site)
   - type: web
-    name: verifywise-frontend
+    name: accordant-frontend
     env: static
     buildCommand: cd Clients && npm install && npm run build
     staticPublishPath: ./Clients/dist
