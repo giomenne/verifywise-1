@@ -116,11 +116,15 @@
     "./scripts/**/*.ts",
     "types/status.type.ts",
     "domain.layer/models/user/user.model.ts",
-    "domain.layer/tests/**/*.ts",
     "domain.layer/**/*.ts"
   ],
   "exclude": [
     "node_modules",
-    "dist"
+    "dist",
+    "**/*.spec.ts",
+    "**/*.test.ts",
+    "domain.layer/tests/**/*",
+    "domain.layer/**/*.spec.ts",
+    "domain.layer/**/*.test.ts"
   ]
 }
