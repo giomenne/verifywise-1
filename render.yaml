@@ -9,7 +9,7 @@ services:
   # Redis (Managed)
   - type: redis
     name: verifywise-redis
-    plan: starter # Change to 'standard' or higher for production
+    plan: free # Note: Redis may not have free tier, consider removing if not available
     maxmemoryPolicy: allkeys-lru
     ipAllowList: [] # Empty array allows all IPs (or specify specific IPs)
 
@@ -18,7 +18,7 @@ services:
     name: verifywise-backend
     env: node
     region: oregon # Change to your preferred region
-    plan: starter # Change to 'standard' or higher for production
+    plan: free # Free tier available with limitations
     buildCommand: cd Servers && npm install && npm run build
     startCommand: cd Servers && npm start
     healthCheckPath: /api/docs
@@ -92,7 +92,7 @@ services:
     name: verifywise-worker
     env: node
     region: oregon # Should match backend region
-    plan: starter # Change to 'standard' or higher for production
+    plan: free # Note: Workers may not have free tier, may need to run jobs in main backend
     buildCommand: cd Servers && npm install && npm run build
     startCommand: cd Servers && npm run worker
     envVars:
@@ -136,7 +136,7 @@ services:
     name: verifywise-bias-fairness
     env: python
     region: oregon # Should match backend region
-    plan: starter # Change to 'standard' or higher for production
+    plan: free # Free tier available with limitations
     buildCommand: cd BiasAndFairnessServers && pip install -r src/requirements.txt
     startCommand: cd BiasAndFairnessServers/src && uvicorn app:app --host 0.0.0.0 --port $PORT
     envVars:
