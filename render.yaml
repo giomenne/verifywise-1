@@ -1,7 +1,7 @@
 databases:
   # PostgreSQL Database (Managed)
   - name: verifywise-database
-    plan: starter # Change to 'standard' or higher for production
+    plan: free # Change to 'standard' or higher for production (starter plan no longer supported)
     databaseName: verifywise
     user: verifywise_user
 
