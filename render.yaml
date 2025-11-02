@@ -96,7 +96,7 @@ services:
     env: python
     region: oregon # Should match backend region
     plan: free # Free tier available with limitations
-    buildCommand: cd BiasAndFairnessServers && pip install -r src/requirements.txt
+    buildCommand: cd BiasAndFairnessServers && pip install --upgrade pip setuptools wheel && pip install --prefer-binary -r src/requirements.txt
     startCommand: cd BiasAndFairnessServers/src && uvicorn app:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PORT
