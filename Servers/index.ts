@@ -1,3 +1,4 @@
+import "reflect-metadata"; // Must be imported before any decorators
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
