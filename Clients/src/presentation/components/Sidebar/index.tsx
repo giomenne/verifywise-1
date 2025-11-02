@@ -51,7 +51,7 @@ import {
   Database,
 } from "lucide-react";
 
-import Logo from "../../assets/imgs/logo.png";
+import Logo from "../../assets/icons/logo.svg";
 
 import Avatar from "../Avatar/VWAvatar";
 import { VerifyWiseContext } from "../../../application/contexts/VerifyWise.context";
