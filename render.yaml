@@ -1,11 +1,11 @@
-services:
+databases:
   # PostgreSQL Database (Managed)
-  - type: postgres
-    name: verifywise-database
+  - name: verifywise-database
     plan: starter # Change to 'standard' or higher for production
     databaseName: verifywise
     user: verifywise_user
 
+services:
   # Redis (Managed)
   - type: redis
     name: verifywise-redis
