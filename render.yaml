@@ -20,7 +20,7 @@ services:
     region: oregon # Change to your preferred region
     plan: free # Free tier available with limitations
     buildCommand: cd Servers && npm install --include=dev --legacy-peer-deps && npm run build
-    startCommand: cd Servers && npm start
+    startCommand: cd Servers && NODE_ENV=production npm start
     healthCheckPath: /api/docs
     envVars:
       - key: NODE_ENV
