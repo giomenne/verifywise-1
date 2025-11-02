@@ -365,13 +365,13 @@ const Sidebar: React.FC<SidebarProps> = ({
               sx={{ opacity: 0.8, fontWeight: 500 }}
               className="app-title"
             >
-              Verify
+              Accordant
               <span
                 style={{
                   color: "#0f604d",
                 }}
               >
-                Wise
+                AI
               </span>
             </Typography>
           </MuiLink>

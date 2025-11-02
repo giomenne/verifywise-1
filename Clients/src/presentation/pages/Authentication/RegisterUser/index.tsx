@@ -225,8 +225,8 @@ const RegisterUser: React.FC = () => {
               fontSize: 40,
             }}
           >
-            Verify
-            <span style={{ color: singleTheme.textColors.theme }}>Wise</span>
+            Accordant
+            <span style={{ color: singleTheme.textColors.theme }}>AI</span>
           </Typography>
           {isInvitationValid === true ? (
             <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
