@@ -1,6 +1,6 @@
 services:
   # PostgreSQL Database (Managed)
-  - type: postgresql
+  - type: postgres
     name: verifywise-database
     plan: starter # Change to 'standard' or higher for production
     databaseName: verifywise
