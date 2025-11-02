@@ -19,7 +19,7 @@ services:
     env: node
     region: oregon # Change to your preferred region
     plan: free # Free tier available with limitations
-    buildCommand: cd Servers && npm install && npm run build
+    buildCommand: cd Servers && npm ci && npm run build
     startCommand: cd Servers && npm start
     healthCheckPath: /api/docs
     envVars:
@@ -87,49 +87,8 @@ services:
       # - key: SMTP_SECURE
       #   value: true
 
-  # Background Worker Service
-  - type: worker
-    name: verifywise-worker
-    env: node
-    region: oregon # Should match backend region
-    plan: free # Note: Workers may not have free tier, may need to run jobs in main backend
-    buildCommand: cd Servers && npm install && npm run build
-    startCommand: cd Servers && npm run worker
-    envVars:
-      - key: NODE_ENV
-        value: production
-      - key: DB_HOST
-        fromDatabase:
-          name: verifywise-database
-          property: host
-      - key: DB_USER
-        fromDatabase:
-          name: verifywise-database
-          property: user
-      - key: DB_PASSWORD
-        fromDatabase:
-          name: verifywise-database
-          property: password
-      - key: DB_PORT
-        fromDatabase:
-          name: verifywise-database
-          property: port
-      - key: DB_NAME
-        fromDatabase:
-          name: verifywise-database
-          property: database
-      - key: DB_SSL
-        value: true
-      - key: REJECT_UNAUTHORIZED
-        value: false
-      - key: REDIS_URL
-        fromService:
-          type: redis
-          name: verifywise-redis
-          property: connectionString
-      - key: JWT_SECRET
-        generateValue: true
-        # Note: After deployment, manually set this to match verifywise-backend JWT_SECRET
+  # Note: Worker removed - background jobs will run in the main backend service (via start.sh)
+  # Workers are not available on free tier
 
   # Bias and Fairness Backend (Python/FastAPI)
   - type: web
@@ -137,6 +96,8 @@ services:
     env: python
     region: oregon # Should match backend region
     plan: free # Free tier available with limitations
+    runtime: python
+    pythonVersion: "3.9"
     buildCommand: cd BiasAndFairnessServers && pip install -r src/requirements.txt
     startCommand: cd BiasAndFairnessServers/src && uvicorn app:app --host 0.0.0.0 --port $PORT
     envVars:
