@@ -11,6 +11,7 @@ services:
     name: verifywise-redis
     plan: starter # Change to 'standard' or higher for production
     maxmemoryPolicy: allkeys-lru
+    ipAllowList: [] # Empty array allows all IPs (or specify specific IPs)
 
   # Backend API Service
   - type: web
@@ -127,11 +128,8 @@ services:
           name: verifywise-redis
           property: connectionString
       - key: JWT_SECRET
-        fromService:
-          type: web
-          name: verifywise-backend
-          property: envVar
-          value: JWT_SECRET
+        generateValue: true
+        # Note: After deployment, manually set this to match verifywise-backend JWT_SECRET
 
   # Bias and Fairness Backend (Python/FastAPI)
   - type: web
@@ -177,7 +175,6 @@ services:
   - type: web
     name: verifywise-frontend
     env: static
-    region: oregon # Change to your preferred region
     buildCommand: cd Clients && npm install && npm run build
     staticPublishPath: ./Clients/dist
     envVars:
