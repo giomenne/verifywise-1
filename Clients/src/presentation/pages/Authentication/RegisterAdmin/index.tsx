@@ -327,13 +327,13 @@ const RegisterAdmin: React.FC<{ multiTenant: boolean }> = ({
                 fontSize: 40,
               }}
             >
-              Verify
-              <span style={{ color: singleTheme.textColors.theme }}>Wise</span>
+              Accordant
+              <span style={{ color: singleTheme.textColors.theme }}>AI</span>
             </Typography>
             <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
               {multiTenant
                 ? "Create admin account"
-                : "Create VerifyWise admin account"}
+                : "Create AccordantAI admin account"}
             </Typography>
             <Stack sx={{ gap: theme.spacing(7.5) }}>
               <Field
