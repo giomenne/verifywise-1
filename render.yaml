@@ -1,0 +1,195 @@
+services:
+  # PostgreSQL Database (Managed)
+  - type: pspg
+    name: verifywise-database
+    plan: starter # Change to 'standard' or higher for production
+    databaseName: verifywise
+    user: verifywise_user
+
+  # Redis (Managed)
+  - type: redis
+    name: verifywise-redis
+    plan: starter # Change to 'standard' or higher for production
+    maxmemoryPolicy: allkeys-lru
+
+  # Backend API Service
+  - type: web
+    name: verifywise-backend
+    env: node
+    region: oregon # Change to your preferred region
+    plan: starter # Change to 'standard' or higher for production
+    buildCommand: cd Servers && npm install && npm run build
+    startCommand: cd Servers && npm start
+    healthCheckPath: /api/docs
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: HOST
+        value: 0.0.0.0
+      - key: DB_HOST
+        fromDatabase:
+          name: verifywise-database
+          property: host
+      - key: DB_USER
+        fromDatabase:
+          name: verifywise-database
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: verifywise-database
+          property: password
+      - key: DB_PORT
+        fromDatabase:
+          name: verifywise-database
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: verifywise-database
+          property: database
+      - key: DB_SSL
+        value: true
+      - key: REJECT_UNAUTHORIZED
+        value: false
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: verifywise-redis
+          property: connectionString
+      - key: JWT_SECRET
+        generateValue: true
+      - key: ALLOWED_ORIGINS
+        sync: false # You'll need to set this manually to your frontend URL
+      - key: FAIRNESS_AND_BIAS_URL
+        sync: false # Will be set automatically after bias-fairness service is deployed
+      - key: MOCK_DATA_ON
+        value: false
+      # Email configuration - set these manually
+      # - key: EMAIL_PROVIDER
+      #   value: resend
+      # - key: RESEND_API_KEY
+      #   sync: false
+      # - key: EMAIL_ID
+      #   sync: false
+      # SMTP alternative:
+      # - key: EMAIL_PROVIDER
+      #   value: smtp
+      # - key: SMTP_HOST
+      #   sync: false
+      # - key: SMTP_PORT
+      #   sync: false
+      # - key: SMTP_USER
+      #   sync: false
+      # - key: SMTP_PASS
+      #   sync: false
+      # - key: SMTP_SECURE
+      #   value: true
+
+  # Background Worker Service
+  - type: worker
+    name: verifywise-worker
+    env: node
+    region: oregon # Should match backend region
+    plan: starter # Change to 'standard' or higher for production
+    buildCommand: cd Servers && npm install && npm run build
+    startCommand: cd Servers && npm run worker
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: DB_HOST
+        fromDatabase:
+          name: verifywise-database
+          property: host
+      - key: DB_USER
+        fromDatabase:
+          name: verifywise-database
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: verifywise-database
+          property: password
+      - key: DB_PORT
+        fromDatabase:
+          name: verifywise-database
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: verifywise-database
+          property: database
+      - key: DB_SSL
+        value: true
+      - key: REJECT_UNAUTHORIZED
+        value: false
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: verifywise-redis
+          property: connectionString
+      - key: JWT_SECRET
+        fromService:
+          type: web
+          name: verifywise-backend
+          property: envVar
+          value: JWT_SECRET
+
+  # Bias and Fairness Backend (Python/FastAPI)
+  - type: web
+    name: verifywise-bias-fairness
+    env: python
+    region: oregon # Should match backend region
+    plan: starter # Change to 'standard' or higher for production
+    buildCommand: cd BiasAndFairnessServers && pip install -r src/requirements.txt
+    startCommand: cd BiasAndFairnessServers/src && uvicorn app:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: PORT
+        value: 10000
+      # Pydantic Settings will map DB_* env vars to db_* fields
+      - key: DB_HOST
+        fromDatabase:
+          name: verifywise-database
+          property: host
+      - key: DB_USER
+        fromDatabase:
+          name: verifywise-database
+          property: user
+      - key: DB_PASSWORD
+        fromDatabase:
+          name: verifywise-database
+          property: password
+      - key: DB_PORT
+        fromDatabase:
+          name: verifywise-database
+          property: port
+      - key: DB_NAME
+        fromDatabase:
+          name: verifywise-database
+          property: database
+      - key: REDIS_URL
+        fromService:
+          type: redis
+          name: verifywise-redis
+          property: connectionString
+      - key: BACKEND_URL
+        sync: false # Will be set to verifywise-backend URL after deployment
+
+  # Frontend (Static Site)
+  - type: web
+    name: verifywise-frontend
+    env: static
+    region: oregon # Change to your preferred region
+    buildCommand: cd Clients && npm install && npm run build
+    staticPublishPath: ./Clients/dist
+    envVars:
+      - key: VITE_APP_API_BASE_URL
+        sync: false # Will be set to backend URL after deployment
+      - key: VITE_IS_DEMO_APP
+        value: false
+      - key: VITE_IS_MULTI_TENANT
+        value: true
+      - key: VITE_SLACK_CLIENT_ID
+        sync: false # Set if using Slack integration
+      - key: VITE_SLACK_URL
+        value: https://slack.com/oauth/v2/authorize
+      - key: VITE_IS_SLACK_VISIBLE
+        value: true
