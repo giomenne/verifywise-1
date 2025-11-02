@@ -19,7 +19,7 @@ services:
     env: node
     region: oregon # Change to your preferred region
     plan: free # Free tier available with limitations
-    buildCommand: cd Servers && npm install --include=dev && npm run build
+    buildCommand: cd Servers && NODE_ENV=development npm install && npm run build
     startCommand: cd Servers && npm start
     healthCheckPath: /api/docs
     envVars:
