@@ -132,7 +132,7 @@ services:
 
   # Frontend (Static Site)
   - type: web
-    name: accordant-frontend
+    name: verifywise-frontend
     env: static
     buildCommand: cd Clients && npm install && npm run build
     staticPublishPath: ./Clients/dist
@@ -143,6 +143,8 @@ services:
         value: false
       - key: VITE_IS_MULTI_TENANT
         value: true
+      - key: VITE_BRAND_NAME
+        value: VerifyWise
       - key: VITE_SLACK_CLIENT_ID
         sync: false # Set if using Slack integration
       - key: VITE_SLACK_URL
