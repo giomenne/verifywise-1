@@ -144,7 +144,7 @@ services:
       - key: VITE_IS_MULTI_TENANT
         value: true
       - key: VITE_BRAND_NAME
-        value: VerifyWise
+        value: AccordantAI
       - key: VITE_SLACK_CLIENT_ID
         sync: false # Set if using Slack integration
       - key: VITE_SLACK_URL
