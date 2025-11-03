@@ -11,7 +11,6 @@ import { setAuthToken } from "../../../../application/redux/auth/authSlice";
 import { setExpiration } from "../../../../application/redux/auth/authSlice";
 import Alert from "../../../components/Alert";
 import { ENV_VARs } from "../../../../../env.vars";
-import { useIsMultiTenant } from "../../../../application/hooks/useIsMultiTenant";
 import { loginUser } from "../../../../application/repository/user.repository";
 
 // Animated loading component specifically for login
@@ -114,8 +113,7 @@ const Login: React.FC = () => {
   const dispatch = useDispatch();
   // State for form values
   const [values, setValues] = useState<FormValues>(initialState);
-  const { isMultiTenant } = useIsMultiTenant();
-
+  
   const loginText = isDemoApp
     ? "Click on Sign in button directly to continue"
     : "Log in to your account";
@@ -326,7 +324,7 @@ const Login: React.FC = () => {
                 label="Remember for 30 days"
                 isChecked={values.rememberMe}
                 value={values.rememberMe ? "true" : "false"}
-                onChange={(e) => {
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                   setValues({ ...values, rememberMe: e.target.checked });
                 }}
                 size="small"
@@ -355,35 +353,33 @@ const Login: React.FC = () => {
             >
               Sign in
             </Button>
-            {isMultiTenant && (
-              <Stack
-                sx={{
-                  display: "flex",
-                  flexDirection: "row",
-                  justifyContent: "center",
-                  alignItems: "center",
-                  gap: theme.spacing(1),
-                }}
+            <Stack
+              sx={{
+                display: "flex",
+                flexDirection: "row",
+                justifyContent: "center",
+                alignItems: "center",
+                gap: theme.spacing(1),
+              }}
+            >
+              <Typography
+                sx={{ fontSize: 14, color: theme.palette.text.secondary }}
               >
-                <Typography
-                  sx={{ fontSize: 14, color: theme.palette.text.secondary }}
-                >
-                  Don't have an account yet?
-                </Typography>
-                <Typography
-                  sx={{
-                    color:
-                      singleTheme.buttons.primary.contained.backgroundColor,
-                    fontSize: 14,
-                    fontWeight: "bold",
-                    cursor: "pointer",
-                  }}
-                  onClick={() => navigate("/register")}
-                >
-                  Register here
-                </Typography>
-              </Stack>
-            )}
+                Don't have an account yet?
+              </Typography>
+              <Typography
+                sx={{
+                  color:
+                    singleTheme.buttons.primary.contained.backgroundColor,
+                  fontSize: 14,
+                  fontWeight: "bold",
+                  cursor: "pointer",
+                }}
+                onClick={() => navigate("/register")}
+              >
+                Register here
+              </Typography>
+            </Stack>
           </Stack>
         </Stack>
       </form>
