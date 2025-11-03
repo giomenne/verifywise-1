@@ -284,8 +284,7 @@ const Login: React.FC = () => {
               fontSize: 40,
             }}
           >
-            Accordant
-            <span style={{ color: singleTheme.textColors.theme }}>AI</span>
+            {ENV_VARs.BRAND_NAME}
           </Typography>
           <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
             {loginText}

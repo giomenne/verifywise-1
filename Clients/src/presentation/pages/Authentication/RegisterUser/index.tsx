@@ -19,6 +19,7 @@ import CustomizableToast from "../../../components/Toast";
 import { extractUserToken } from "../../../../application/tools/extractToken";
 import { useSearchParams } from "react-router-dom";
 import { handleAlert } from "../../../../application/tools/alertUtils";
+import { ENV_VARs } from "../../../../../env.vars";
 const Alert = lazy(() => import("../../../components/Alert"));
 
 export interface AlertType {
@@ -225,12 +226,11 @@ const RegisterUser: React.FC = () => {
               fontSize: 40,
             }}
           >
-            Accordant
-            <span style={{ color: singleTheme.textColors.theme }}>AI</span>
+            {ENV_VARs.BRAND_NAME}
           </Typography>
           {isInvitationValid === true ? (
             <Typography sx={{ fontSize: 16, fontWeight: "bold" }}>
-              Create AccordantAI user account
+              Create {ENV_VARs.BRAND_NAME} user account
             </Typography>
           ) : (
             <Typography
